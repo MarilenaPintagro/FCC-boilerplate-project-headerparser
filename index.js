@@ -1,9 +1,10 @@
 // index.js
 // where your node app starts
-//yeee
+
 // init project
 require('dotenv').config();
 var express = require('express');
+var os = require('os');
 var app = express();
 
 // enable CORS (https://en.wikipedia.org/wiki/Cross-origin_resource_sharing)
@@ -23,6 +24,26 @@ app.get("/", function (req, res) {
 // your first API endpoint... 
 app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
+});
+/*
+A request to /api/whoami should return a JSON object with your IP address in the ipaddress key.
+Waiting: A request to /api/whoami should return a JSON object with your preferred language in the language key.
+Waiting: A request to /api/whoami should return a JSON object with your software in the software key.
+*/
+app.get("/api/whoami", function (req, res) {
+  var interf = os.networkInterfaces();
+  var ip = interf.eth0[0].address
+  console.log(ip);
+
+  const env = process.env;
+const languag = env.LANG || env.LANGUAGE || env.LC_ALL || env.LC_MESSAGES;
+  console.log(languag);
+
+  var sw = os.type();
+
+  var obj = {ipaddress: ip, language: languag, software: sw};
+  console.log(obj);
+  res.json(obj);
 });
 
 
